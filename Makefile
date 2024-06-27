@@ -11,7 +11,7 @@ HEADERS := -I ./include -I $(LIBMLX)/include -I $(LIBFT)/include
 
 LIBS := $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a -ldl -lglfw -pthread -lm
 
-SRCS := fractol.c utils.c mandelbrot.c
+SRCS := fractol.c utils.c mandelbrot.c julia.c
 
 OBJS := ${SRCS:.c=.o}
 

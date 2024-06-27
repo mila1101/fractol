@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 11:48:04 by msoklova          #+#    #+#             */
-/*   Updated: 2024/06/25 15:43:18 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:26:27 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@ typedef struct s_fractal
 void	open_window();
 void	draw_mandelbrot(mlx_image_t *img);
 void	pixel_colour(mlx_image_t *img, t_fractal *fractal, int iter, int max_iter);
+void	draw_julia(mlx_image_t *img, double re, double im);
+double	ft_atof(const char *str);
 
 #endif
