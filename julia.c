@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:34:50 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/08 15:35:06 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:40:21 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void	draw_julia(mlx_image_t *img, double re, double im, t_fractal	*jul)
 		jul->x = 0;
 		while (jul->x < WIDTH)
 		{
-			jul->zx = (double)jul->x / WIDTH * 3.0 - 1.5;
-			jul->zy = (double)jul->y / HEIGHT * 3.0 - 1.5;
+			//jul->zx = (double)jul->x / WIDTH * 3.0 - 1.5;
+			//jul->zy = (double)jul->y / HEIGHT * 3.0 - 1.5;
+			jul->zx = jul->x_min + (double)jul->x / WIDTH * (jul->x_max - jul->x_min);
+			jul->zy = jul->y_min + (double)jul->y / HEIGHT * (jul->y_max - jul->y_min);
 			i = 0;
 			while (jul->zx * jul->zx + jul->zy * jul->zy < 4 && i < max_i)
 			{

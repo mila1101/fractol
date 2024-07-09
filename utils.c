@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 18:14:57 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/09 11:13:19 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:43:43 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void open_window(double re, double im, int flag)
 {
 	mlx_t		*mlx;
-	mlx_image_t	*img;
+	mlx_image_t	*image;
 	t_fractal	*fractal;
 
 	mlx = mlx_init(WIDTH, HEIGHT, "FRACT'OL", false);
 	if (!mlx)
 		exit (1);
-	img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	if (!img)
+	image = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!image)
 	{
 		mlx_terminate(mlx);
 		exit(1);
@@ -30,7 +30,7 @@ void open_window(double re, double im, int flag)
 	fractal = (t_fractal *)malloc(sizeof(t_fractal));
 	if (!fractal)
 	{
-		mlx_delete_image(mlx, img);
+		mlx_delete_image(mlx, image);
 		mlx_terminate(mlx);
 		exit(1);
     }
@@ -39,16 +39,38 @@ void open_window(double re, double im, int flag)
 	fractal->y_min = -2.0;
 	fractal->y_max = 2.0;
 	fractal->mlx = mlx;
+	fractal->img = image;
+	fractal->flg = flag;
+	fractal->re = re;
+	fractal->im = im;
 	if (flag)
-		draw_julia(img, re, im, fractal);
+		draw_julia(image, re, im, fractal);
 	else
-		draw_mandelbrot(img, fractal);
-	mlx_image_to_window(mlx, img, 0, 0);
+		draw_mandelbrot(image, fractal);
+	mlx_image_to_window(mlx, image, 0, 0);
 	mlx_scroll_hook(mlx, &ft_zoom, fractal);
+	mlx_loop_hook(mlx, &update_img, fractal);
 	mlx_loop(mlx);
 	free(fractal);
-	mlx_delete_image(mlx, img);
+	mlx_delete_image(mlx, image);
 	mlx_terminate(mlx);
+}
+
+void update_img(void *param)
+{
+	t_fractal *fractal = (t_fractal *)param;
+
+	if (fractal->draw)
+	{
+		//mlx_delete_image(fractal->mlx, fractal->img);
+		if (fractal->flg)
+			draw_julia(fractal->img, fractal->re, fractal->im, fractal);
+		else
+			draw_mandelbrot(fractal->img, fractal);
+		mlx_image_to_window(fractal->mlx, fractal->img, 0, 0);
+		fractal->draw = false;
+	}
+	fractal->draw = false;
 }
 
 void	pixel_colour(mlx_image_t *img, t_fractal *fractal, int iter, int max_iter)
@@ -148,13 +170,21 @@ void ft_zoom(double xdelta, double ydelta, void *param)
 	if (ydelta > 0)
 	{
 		zoom = 0.5;
-		puts("zooom ouuut");
+		puts("in");
 	}
 	else if (ydelta < 0)
 	{
 		zoom = 1.5;
-		puts("in");
+		puts("zooom ouuut");
 	}
+	else
+		return ;
+	fractal->x_min = x_pos + ((fractal->x_min - x_pos) * zoom);
+	fractal->x_max = x_pos + ((fractal->x_max - x_pos) * zoom);
+	fractal->y_min = y_pos + ((fractal->y_min - y_pos) * zoom);
+	fractal->y_max = y_pos + ((fractal->y_max - y_pos) * zoom);
+
+	fractal->draw = true;
 }
 
 

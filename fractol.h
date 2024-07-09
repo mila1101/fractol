@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 11:48:04 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/09 11:11:23 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:14:44 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ typedef struct s_fractal
 	int		colour;
 	double	zoom;
 	bool	draw;
+	mlx_image_t	*img;
+	int		flg;
+	double	re;
+	double	im;
 }	t_fractal;
 
 
@@ -55,5 +59,6 @@ void	draw_julia(mlx_image_t *img, double re, double im, t_fractal	*jul);
 double	ft_atof(const char *str);
 //void	mouse(double x, double y, void *param);
 void 	ft_zoom(double deltaX, double deltaY, void *parameters);
+void update_img(void *param);
 
 #endif
