@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 18:14:57 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/09 15:43:43 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:30:07 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void open_window(double re, double im, int flag)
 		draw_julia(image, re, im, fractal);
 	else
 		draw_mandelbrot(image, fractal);
-	mlx_image_to_window(mlx, image, 0, 0);
+	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+		mlx_close_window(mlx);
 	mlx_scroll_hook(mlx, &ft_zoom, fractal);
 	mlx_loop_hook(mlx, &update_img, fractal);
 	mlx_loop(mlx);
@@ -59,7 +60,10 @@ void open_window(double re, double im, int flag)
 void update_img(void *param)
 {
 	t_fractal *fractal = (t_fractal *)param;
+	mlx_t *mlx = fractal->mlx;
 
+	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(mlx);
 	if (fractal->draw)
 	{
 		//mlx_delete_image(fractal->mlx, fractal->img);
