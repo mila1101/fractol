@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 11:48:04 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/09 14:14:44 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:20:27 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ typedef struct s_fractal
 	double	re;
 	double	im;
 }	t_fractal;
+
+typedef struct s_params
+{
+	double re;
+	double im;
+	int flag;
+}	t_params;
 
 
 void	open_window();
