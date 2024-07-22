@@ -6,7 +6,7 @@
 /*   By: msoklova <msoklova@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 11:48:04 by msoklova          #+#    #+#             */
-/*   Updated: 2024/07/20 15:43:13 by msoklova         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:13:23 by msoklova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,18 @@ typedef struct s_axis
 	double	im;
 }	t_axis;
 
-void	open_window(double re, double im, int flag);
-//void	draw_mandelbrot(mlx_image_t *img);
-void	draw_mandelbrot(mlx_image_t *img, t_fractal *mand);
-void	pixel_colour(mlx_image_t *img, t_fractal *fr, int iter, int max_iter);
-//void	draw_julia(mlx_image_t *img, double re, double im);
-void	draw_julia(mlx_image_t *img, double re, double im, t_fractal	*jul);
-double	ft_atof(const char *str);
-//void	mouse(double x, double y, void *param);
-void	ft_zoom(double deltaX, double deltaY, void *parameters);
-void	update_img(void *param);
+mlx_t		*init_mlx_img(mlx_image_t **image);
+t_fractal	*init_fractal(mlx_t *mlx, mlx_image_t *image, t_params *params);
+void		free_data(t_fractal *fractal, t_params *params);
+void		open_window(double re, double im, int flag);
+void		update_img(void *param);
+void		pixel_colour(mlx_image_t *img, t_fractal *fr,
+				int iter, int max_iter);
+void		draw_mandelbrot(mlx_image_t *img, t_fractal *mand);
+void		draw_julia(mlx_image_t *img, double re,
+				double im, t_fractal	*jul);
+double		ft_atof(const char *str);
+void		mouse_pos(t_fractal *fractal, double *x_pos, double *y_pos);
+void		ft_zoom(double deltaX, double deltaY, void *parameters);
 
 #endif
