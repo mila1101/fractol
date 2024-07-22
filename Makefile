@@ -1,43 +1,61 @@
 NAME := fractol
 
-CFLAGS := -Wextra -Wall -Werror -Wunreachable-code -Ofast
-#CFLAGS := -Wextra -Wall -Werror
-
-LIBMLX := ./MLX42
-
+OBJ_DIR := objs
+MLX_DIR := ./MLX42
 LIBFT := ./libft
 
-HEADERS := -I ./include -I $(LIBMLX)/include -I $(LIBFT)/include
+HEADERS := -I ./include -I $(MLX_DIR)/include -I $(LIBFT)/include
+LIBS := $(MLX_DIR)/build/libmlx42.a $(LIBFT)/libft.a -ldl -lglfw -pthread -lm
 
-LIBS := $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a -ldl -lglfw -pthread -lm
+SRCS := fractol.c utils.c mandelbrot.c julia.c ft_atof.c mouse.c pixels.c
+OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
-SRCS := fractol.c utils.c mandelbrot.c julia.c
+RM := rm
+CC := cc
+MAKE := make
+MAKE_DIR := mkdir
 
-OBJS := ${SRCS:.c=.o}
+CFLAGS := -Wall -Wextra -Werror
+LIB_FLAGS := -framework Cocoa -framework OpenGL -framework IOKit $(LIBS) -g
 
 all: libmlx libft $(NAME)
 
 libmlx:
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+	@if [ ! -d "$(MLX_DIR)" ]; then \
+		echo "MLX42 not found. Cloning..."; \
+		git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR); \
+	fi
+	@echo "Start compiling MLX..."
+	@cd $(MLX_DIR) && cmake -B build && $(MAKE) -C build -j4
+	@echo "Done compiling MLX"
 
 libft:
-	@make -C $(LIBFT)
+	@$(MAKE) -C $(LIBFT)
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
-
-$(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+$(NAME): $(OBJ_DIR) $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	@echo "Successful build!"
 
 clean:
-	@rm -rf $(OBJS)
-	@rm -rf $(LIBMLX)/build
-	@make -C $(LIBFT) clean
+	@$(RM) -rf $(OBJ_DIR)
+	@$(RM) -rf $(MLX_DIR)/build
+	@$(MAKE) -C $(LIBFT) clean
+	@echo "Bins successfully cleaned!"
 
 fclean: clean
-	@rm -rf $(NAME)
-	@make -C $(LIBFT) fclean
+	@$(RM) -rf $(NAME)
+	@$(MAKE) -C $(LIBFT) fclean
+	@$(RM) -rf $(MLX_DIR)
+	@echo "Everything successfully cleaned!"
 
-re: clean all
+re: fclean all
 
-.PHONY: all, clean, fclean, re, libmlx, libft
+$(OBJ_DIR)/%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS)
+
+$(OBJ_DIR):
+	@echo "Starting..."
+	$(MAKE_DIR) $(OBJ_DIR)
+
+.PHONY: all clean fclean re libmlx libft
+
