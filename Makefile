@@ -1,3 +1,5 @@
+#fractol
+
 NAME := fractol
 
 OBJ_DIR := objs
